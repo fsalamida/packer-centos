@@ -1,0 +1,43 @@
+{
+    "builders": [
+        {
+            "boot_command": [
+                "<esc>",
+                "<wait>linux ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/anaconda-ks-6_5-64.cfg<enter>"
+            ],
+            "boot_wait": "5s",
+            "disk_size": 40000,
+            "guest_os_type": "RedHat_64",
+            "headless": false,
+            "http_directory": "./http_directory",
+            "iso_checksum": "939fd1d87c11ffe7795324438b85adfb",
+            "iso_checksum_type": "md5",
+            "iso_url": "http://mirrors.usinternet.com/centos/6.5/isos/x86_64/CentOS-6.5-x86_64-netinstall.iso",
+            "ssh_password": "vagrant",
+            "ssh_username": "root",
+            "ssh_wait_timeout": "20m",
+            "type": "virtualbox",
+            "vboxmanage": [
+                ["modifyvm", "{{.Name}}", "--memory", "1024"],
+                ["modifyvm", "{{.Name}}", "--cpus", "2"]
+            ],
+            "vm_name": "packer-centos-6_5-64"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "provisioners/install-virtualbox-guest-additions.sh"
+        },
+        {
+            "type": "shell",
+            "script": "provisioners/clean-empty-space.sh"
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "vagrant",
+            "output": "centos-6_5-64_virtualbox.box"
+        }
+    ]
+}
