@@ -1,4 +1,4 @@
 packer-centos
 =============
 
-packer build <json_file>
+packer build json_file
