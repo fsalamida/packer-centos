@@ -15,7 +15,7 @@
             "iso_url": "http://mirrors.usinternet.com/centos/6.5/isos/x86_64/CentOS-6.5-x86_64-netinstall.iso",
             "ssh_password": "vagrant",
             "ssh_username": "root",
-            "ssh_wait_timeout": "20m",
+            "ssh_wait_timeout": "300m",
             "type": "virtualbox",
             "vboxmanage": [
                 ["modifyvm", "{{.Name}}", "--memory", "1024"],
