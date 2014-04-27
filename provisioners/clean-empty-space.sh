@@ -9,3 +9,6 @@ yum clean all
 # Clean out all of the caching dirs
 rm -rf /var/cache/* /usr/share/doc/*
 
+cat /dev/zero > /tmp/zero.fill
+rm /tmp/zero.fill
+

@@ -3,7 +3,7 @@
         {
             "boot_command": [
                 "<esc>",
-                "<wait>linux ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/anaconda-ks-6_5-64.cfg<enter>"
+                "<wait>linux ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/salt-appliance-1_0.ks<enter>"
             ],
             "boot_wait": "5s",
             "disk_size": 40000,
@@ -12,16 +12,17 @@
             "http_directory": "./http_directory",
             "iso_checksum": "939fd1d87c11ffe7795324438b85adfb",
             "iso_checksum_type": "md5",
-            "iso_url": "http://mirrors.usinternet.com/centos/6.5/isos/x86_64/CentOS-6.5-x86_64-minimal.iso",
+            "iso_url": "http://mi.mirror.garr.it/mirrors/CentOS/6.5/isos/x86_64/CentOS-6.5-x86_64-netinstall.iso",
             "ssh_password": "vagrant",
             "ssh_username": "root",
             "ssh_wait_timeout": "300m",
-            "type": "virtualbox",
+            "type": "virtualbox-iso",
             "vboxmanage": [
                 ["modifyvm", "{{.Name}}", "--memory", "1024"],
                 ["modifyvm", "{{.Name}}", "--cpus", "2"]
             ],
-            "vm_name": "packer-centos-6_5-64"
+            "shutdown_command": "echo 'packer' | sudo -S shutdown -P now",
+            "vm_name": "salt-appliance"
         }
     ],
     "provisioners": [
@@ -32,11 +33,15 @@
         {
             "type": "shell",
             "script": "provisioners/bootstrap.sh",
-            "execute_command":"{{ .Path }} -M  git v2014.1.0 && chkconfig salt-master off && chkconfig salt-minion off"
+            "execute_command":"{{ .Path }} -M  git v2014.1.0"
         },
         {
             "type": "shell",
-            "script": "provisioners/install-halite.sh"
+            "script": "provisioners/setup-salt.sh"
+        },
+    	{
+       	    "type": "shell",
+            "inline": [ "sleep 10" ]
         },
         {
             "type": "shell",
@@ -46,7 +51,8 @@
     "post-processors": [
         {
             "type": "vagrant",
-            "output": "centos-6_5-64_virtualbox.box"
+            "output": "salt-appliance-1_0-vbox.box"
         }
     ]
 }
+
